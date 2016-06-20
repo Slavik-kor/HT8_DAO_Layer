@@ -7,35 +7,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.trepam.karotki.ht8.connectionpool.exception.ConnectionPoolException;
 import by.trepam.karotki.ht8.dao.DaoFactory;
 import by.trepam.karotki.ht8.dao.IFilmDao;
-
-import by.trepam.karotki.ht8.entity.Comment;
+import by.trepam.karotki.ht8.dao.exception.DaoException;
 import by.trepam.karotki.ht8.entity.Film;
 
 public class FilmDaoImpl implements IFilmDao {
 
 	@Override
-	public List<Comment> getCommentsByFilm(String title) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Film> getTopFilmsByRating(int value) {
+	public List<Film> getTopFilmsByRating(int value) throws DaoException {
 		List<Film> filmList = new ArrayList<Film>();
-		String sql = "SELECT Title, ROUND(AVG(Rate),2) Rating "
-				+ "FROM film JOIN rate ON rate.Film_id = film.idFilm "
-				+ "GROUP BY Title "
-				+ "ORDER BY Rating DESC "
-				+ " LIMIT ?;";
-		Connection con = null;
-		try {
-			con = DaoFactory.getConnection();
-		} catch (ConnectionPoolException e) {
-			e.printStackTrace();
-		}
+		String sql = "SELECT Title, ROUND(AVG(Rate),2) Rating " + "FROM film JOIN rate ON rate.Film_id = film.idFilm "
+				+ "GROUP BY Title " + "ORDER BY Rating DESC " + " LIMIT ? ;";
+
+		Connection con = DaoFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, value);
@@ -47,30 +32,20 @@ public class FilmDaoImpl implements IFilmDao {
 				filmList.add(film);
 			}
 		} catch (SQLException e) {
-
+			throw new DaoException("Can't perform query", e);
 		} finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				// log
-			}
+			DaoFactory.returnConnection(con);
 		}
 		return filmList;
 	}
 
 	@Override
-	public List<Film> getFilmsByActors(String firstName, String lastName) {
+	public List<Film> getFilmsByActors(String firstName, String lastName) throws DaoException {
 		List<Film> filmList = new ArrayList<Film>();
-		String sql = "SELECT Title"
-				+ " FROM film JOIN Film_has_Authors ON Film_has_Authors.Film_id = film.idFilm"
+		String sql = "SELECT Title" + " FROM film JOIN Film_has_Authors ON Film_has_Authors.Film_id = film.idFilm"
 				+ " JOIN Author ON Author.idAuthor = Film_has_Authors.Authors_idAuthors"
 				+ " WHERE (AuthorFirstName = ?) AND (AuthorLastName = ?) AND (Role = 'Actor');";
-		Connection con = null;
-		try {
-			con = DaoFactory.getConnection();
-		} catch (ConnectionPoolException e) {
-			e.printStackTrace();
-		}
+		Connection con = DaoFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, firstName);
@@ -82,32 +57,23 @@ public class FilmDaoImpl implements IFilmDao {
 				filmList.add(film);
 			}
 		} catch (SQLException e) {
-		// log
-         e.printStackTrace();
+			// log
+			throw new DaoException("Can't perform query", e);
 		} finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				// log
-				 e.printStackTrace();
-			}
+			DaoFactory.returnConnection(con);
 		}
 		return filmList;
 	}
 
 	@Override
-	public List<Film> getFilmsByDirectors(String firstName, String lastName) {
+	public List<Film> getFilmsByDirectors(String firstName, String lastName) throws DaoException {
 		List<Film> filmList = new ArrayList<Film>();
-		String sql = "SELECT Title "
-				+ "FROM film JOIN Film_has_Authors ON Film_has_Authors.Film_id = film.idFilm "
+		String sql = "SELECT Title " + "FROM film JOIN Film_has_Authors ON Film_has_Authors.Film_id = film.idFilm "
 				+ "JOIN Author ON Author.idAuthor = Film_has_Authors.Authors_idAuthors "
 				+ "WHERE (AuthorFirstName = ?) AND (AuthorLastName = ?) AND (Role = 'Director');";
-		Connection con = null;
-		try {
-			con = DaoFactory.getConnection();
-		} catch (ConnectionPoolException e) {
-			e.printStackTrace();
-		}
+
+		Connection con = DaoFactory.getConnection();
+
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, firstName);
@@ -119,32 +85,23 @@ public class FilmDaoImpl implements IFilmDao {
 				filmList.add(film);
 			}
 		} catch (SQLException e) {
-		// log
-         e.printStackTrace();
+			// log
+			throw new DaoException("Can't perform query", e);
 		} finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				// log
-				 e.printStackTrace();
-			}
+			DaoFactory.returnConnection(con);
 		}
 		return filmList;
 	}
 
 	@Override
-	public List<Film> getFilmsByScenarioWriters(String firstName, String lastName) {
+	public List<Film> getFilmsByScenarioWriters(String firstName, String lastName) throws DaoException {
 		List<Film> filmList = new ArrayList<Film>();
-		String sql = "SELECT Title "
-				+ "FROM film JOIN Film_has_Authors ON Film_has_Authors.Film_id = film.idFilm "
+		String sql = "SELECT Title " + "FROM film JOIN Film_has_Authors ON Film_has_Authors.Film_id = film.idFilm "
 				+ "JOIN Author ON Author.idAuthor = Film_has_Authors.Authors_idAuthors "
 				+ "WHERE (AuthorFirstName = ?) AND (AuthorLastName = ?) AND (Role = 'ScenarioWriter');";
-		Connection con = null;
-		try {
-			con = DaoFactory.getConnection();
-		} catch (ConnectionPoolException e) {
-			e.printStackTrace();
-		}
+
+		Connection con = DaoFactory.getConnection();
+
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, firstName);
@@ -156,32 +113,22 @@ public class FilmDaoImpl implements IFilmDao {
 				filmList.add(film);
 			}
 		} catch (SQLException e) {
-		// log
-         e.printStackTrace();
+			// log
+			throw new DaoException("Can't perform query", e);
 		} finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				// log
-				 e.printStackTrace();
-			}
+			DaoFactory.returnConnection(con);
 		}
 		return filmList;
 	}
 
 	@Override
-	public List<Film> getFilmsByGenre(String genre) {
+	public List<Film> getFilmsByGenre(String genre) throws DaoException {
 		List<Film> filmList = new ArrayList<Film>();
-		String sql = "SELECT Title "
-				+ "FROM film JOIN Film_Genre ON Film_Genre.Film_id = film.idFilm "
-				+ "JOIN Genre ON Genre.idGenre = Film_Genre.Genre_id "
-				+ "WHERE Name = ? ;";
-		Connection con = null;
-		try {
-			con = DaoFactory.getConnection();
-		} catch (ConnectionPoolException e) {
-			e.printStackTrace();
-		}
+		String sql = "SELECT Title " + "FROM film JOIN Film_Genre ON Film_Genre.Film_id = film.idFilm "
+				+ "JOIN Genre ON Genre.idGenre = Film_Genre.Genre_id " + "WHERE Name = ? ;";
+
+		Connection con = DaoFactory.getConnection();
+
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, genre);
@@ -192,32 +139,21 @@ public class FilmDaoImpl implements IFilmDao {
 				filmList.add(film);
 			}
 		} catch (SQLException e) {
-		// log
-         e.printStackTrace();
+			// log
+			throw new DaoException("Can't perform query", e);
 		} finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				// log
-				 e.printStackTrace();
-			}
+			DaoFactory.returnConnection(con);
 		}
 		return filmList;
 	}
 
 	@Override
-	public List<Film> getMostBudgetFilms(int value) {
+	public List<Film> getMostBudgetFilms(int value) throws DaoException {
 		List<Film> filmList = new ArrayList<Film>();
-		String sql = "SELECT Title, Budget "
-				+ "FROM film "
-				+ "ORDER BY Budget DESC "
-				+ "LIMIT ? ;";
-		Connection con = null;
-		try {
-			con = DaoFactory.getConnection();
-		} catch (ConnectionPoolException e) {
-			e.printStackTrace();
-		}
+		String sql = "SELECT Title, Budget " + "FROM film " + "ORDER BY Budget DESC " + "LIMIT ? ;";
+
+		Connection con = DaoFactory.getConnection();
+
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, value);
@@ -229,31 +165,21 @@ public class FilmDaoImpl implements IFilmDao {
 				filmList.add(film);
 			}
 		} catch (SQLException e) {
-		// log
-         e.printStackTrace();
+			// log
+			throw new DaoException("Can't perform query", e);
 		} finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				// log
-				 e.printStackTrace();
-			}
+			DaoFactory.returnConnection(con);
 		}
 		return filmList;
 	}
 
 	@Override
-	public List<Film> getMostCashBoxFilms(int value) {
+	public List<Film> getMostCashBoxFilms(int value) throws DaoException {
 		List<Film> filmList = new ArrayList<Film>();
-		String sql = "SELECT Title, BoxOfficeCash "
-				+ "FROM film "
-				+ "ORDER BY BoxOfficeCash DESC LIMIT ?";
-		Connection con = null;
-		try {
-			con = DaoFactory.getConnection();
-		} catch (ConnectionPoolException e) {
-			e.printStackTrace();
-		}
+		String sql = "SELECT Title, BoxOfficeCash " + "FROM film " + "ORDER BY BoxOfficeCash DESC LIMIT ?";
+
+		Connection con = DaoFactory.getConnection();
+
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, value);
@@ -265,15 +191,10 @@ public class FilmDaoImpl implements IFilmDao {
 				filmList.add(film);
 			}
 		} catch (SQLException e) {
-		// log
-         e.printStackTrace();
+			// log
+			throw new DaoException("Can't perform query", e);
 		} finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				// log
-				 e.printStackTrace();
-			}
+			DaoFactory.returnConnection(con);
 		}
 		return filmList;
 	}

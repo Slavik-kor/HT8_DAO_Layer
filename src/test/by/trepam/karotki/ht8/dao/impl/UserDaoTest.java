@@ -1,7 +1,8 @@
-package test.by.trepam.karotki.ht8.test.dao.impl;
+package test.by.trepam.karotki.ht8.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -11,12 +12,16 @@ import org.junit.Test;
 
 import by.trepam.karotki.ht8.dao.DaoFactory;
 import by.trepam.karotki.ht8.dao.IUserDao;
+import by.trepam.karotki.ht8.dao.exception.DaoException;
 import by.trepam.karotki.ht8.entity.User;
 
 public class UserDaoTest {
 	private static DaoFactory factory;
 	private static IUserDao uDao;
 	private List<User> uList;
+	private static final String city = "Минск";
+	private static final String country = "Беларусь";
+	private static final int top = 5;
 
 	@BeforeClass
 	public static void initDaoUser() {
@@ -31,7 +36,12 @@ public class UserDaoTest {
 
 	@Test
 	public void getUsersByCityTest() {
-		uList = uDao.getUsersByCity("Минск");
+
+		try {
+			uList = uDao.getUsersByCity(city);
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
 		for (User i : uList) {
 			assertNotNull("NotNull", i);
 		}
@@ -39,7 +49,11 @@ public class UserDaoTest {
 
 	@Test
 	public void getUsersByCountryTest() {
-		uList = uDao.getUsersByCity("Беларусь");
+		try {
+			uList = uDao.getUsersByCity(country);
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
 		for (User i : uList) {
 			assertNotNull("NotNull", i);
 		}
@@ -47,7 +61,11 @@ public class UserDaoTest {
 
 	@Test
 	public void getbannedTest() {
-		uList = uDao.getBannedUsers();
+		try {
+			uList = uDao.getBannedUsers();
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
 		for (User i : uList) {
 			assertEquals(false, i.isActive());
 		}
@@ -55,7 +73,11 @@ public class UserDaoTest {
 
 	@Test
 	public void getActiveUsersByRateTest() {
-		uList = uDao.getActiveUsersByRate(5);
+		try {
+			uList = uDao.getActiveUsersByRate(top);
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
 		for (User i : uList) {
 			assertNotNull("NotNull", i);
 		}
@@ -63,7 +85,11 @@ public class UserDaoTest {
 
 	@Test
 	public void getActiveUsersByCommentTest() {
-		uList = uDao.getActiveUsersByRate(5);
+		try {
+			uList = uDao.getActiveUsersByRate(top);
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
 		for (User i : uList) {
 			assertNotNull("NotNull", i);
 		}

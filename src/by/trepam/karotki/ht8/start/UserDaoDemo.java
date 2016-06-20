@@ -4,11 +4,12 @@ import java.util.List;
 
 import by.trepam.karotki.ht8.dao.DaoFactory;
 import by.trepam.karotki.ht8.dao.IUserDao;
+import by.trepam.karotki.ht8.dao.exception.DaoException;
 import by.trepam.karotki.ht8.entity.User;
 
 public class UserDaoDemo {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws DaoException{
 		DaoFactory factory = DaoFactory.getDaoFactory();
 		IUserDao uDao = factory.getUserDao();
 
