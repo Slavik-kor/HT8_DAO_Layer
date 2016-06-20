@@ -17,9 +17,7 @@ public class DaoFactory {
 
 	private DaoFactory() {
 		try {
-
 			conPool.initPoolData();
-
 		} catch (ConnectionPoolException e) {
 			// log
 		}

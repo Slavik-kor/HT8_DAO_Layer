@@ -12,9 +12,8 @@ public class FilmDaoDemo {
 		DaoFactory factory = DaoFactory.getDaoFactory();
 		IFilmDao fDao = factory.getFilmDao();
 		System.out.println("Top 5 The best films by rating:");
-
+		 System.out.println("1");
 		List<Film> fList = fDao.getTopFilmsByRating(5);
-
 		for (Film i : fList) {
 			System.out.println(i.getTitle() + "  " + i.getRate());
 		}
