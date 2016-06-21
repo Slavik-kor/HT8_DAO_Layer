@@ -7,12 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.trepam.karotki.ht8.dao.DaoFactory;
+import by.trepam.karotki.ht8.connectionpool.ConnectionPool;
+import by.trepam.karotki.ht8.connectionpool.exception.ConnectionPoolException;
 import by.trepam.karotki.ht8.dao.IUserDao;
 import by.trepam.karotki.ht8.dao.exception.DaoException;
 import by.trepam.karotki.ht8.entity.User;
 
 public class UserDaoImpl implements IUserDao {
+	private ConnectionPool conPool = ConnectionPool.getInstance();
+	
 	private static final String usersByCity = "SELECT AccountFirstName, AccountLastName FROM Account "
 			+ "JOIN City ON City.idCity = Account.City_id " + "WHERE CityName = ? ;";
 	private static final String usersByCountry = "SELECT AccountFirstName, AccountLastName FROM Account "
@@ -30,10 +33,11 @@ public class UserDaoImpl implements IUserDao {
 	@Override
 	public List<User> getUsersByCity(String city) throws DaoException {
 		List<User> userList = new ArrayList<User>();
-		Connection con = DaoFactory.getConnection();
+		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
+			con = conPool.takeConnection();
 			ps = con.prepareStatement(usersByCity);
 			ps.setString(1, city);
 			rs = ps.executeQuery();
@@ -43,16 +47,20 @@ public class UserDaoImpl implements IUserDao {
 				user.setLastName(rs.getString("AccountLastName"));
 				userList.add(user);
 			}
+		} catch (ConnectionPoolException e) {
+			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
 				rs.close();
 				ps.close();
+				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+			} catch (ConnectionPoolException e) {
+				throw new DaoException("Can't return connection to ConnectionPool", e);
 			}
-			DaoFactory.returnConnection(con);
 		}
 		return userList;
 	}
@@ -60,10 +68,11 @@ public class UserDaoImpl implements IUserDao {
 	@Override
 	public List<User> getUsersByCountry(String country) throws DaoException {
 		List<User> userList = new ArrayList<User>();
-		Connection con = DaoFactory.getConnection();
+		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
+			con = conPool.takeConnection();
 			ps = con.prepareStatement(usersByCountry);
 			ps.setString(1, country);
 			rs = ps.executeQuery();
@@ -73,16 +82,20 @@ public class UserDaoImpl implements IUserDao {
 				user.setLastName(rs.getString("AccountLastName"));
 				userList.add(user);
 			}
+		} catch (ConnectionPoolException e) {
+			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
 				rs.close();
 				ps.close();
+				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+			} catch (ConnectionPoolException e) {
+				throw new DaoException("Can't return connection to ConnectionPool", e);
 			}
-			DaoFactory.returnConnection(con);
 		}
 		return userList;
 	}
@@ -90,10 +103,11 @@ public class UserDaoImpl implements IUserDao {
 	@Override
 	public List<User> getBannedUsers() throws DaoException {
 		List<User> userList = new ArrayList<User>();
-		Connection con = DaoFactory.getConnection();
+		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
+			con = conPool.takeConnection();
 			ps = con.prepareStatement(BannedUsers);
 			rs = ps.executeQuery();
 			while (rs.next()) {
@@ -102,16 +116,20 @@ public class UserDaoImpl implements IUserDao {
 				user.setLastName(rs.getString("AccountLastName"));
 				userList.add(user);
 			}
+		} catch (ConnectionPoolException e) {
+			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
 				rs.close();
 				ps.close();
+				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+			} catch (ConnectionPoolException e) {
+				throw new DaoException("Can't return connection to ConnectionPool", e);
 			}
-			DaoFactory.returnConnection(con);
 		}
 		return userList;
 	}
@@ -119,10 +137,11 @@ public class UserDaoImpl implements IUserDao {
 	@Override
 	public List<User> getActiveUsersByRate(int value) throws DaoException {
 		List<User> userList = new ArrayList<User>();
-		Connection con = DaoFactory.getConnection();
+		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
+			con = conPool.takeConnection();
 			ps = con.prepareStatement(usersByRate);
 			ps.setInt(1, value);
 			rs = ps.executeQuery();
@@ -133,16 +152,20 @@ public class UserDaoImpl implements IUserDao {
 				user.setRate(rs.getInt("Rate"));
 				userList.add(user);
 			}
+		} catch (ConnectionPoolException e) {
+			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
 				rs.close();
 				ps.close();
+				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+			} catch (ConnectionPoolException e) {
+				throw new DaoException("Can't return connection to ConnectionPool", e);
 			}
-			DaoFactory.returnConnection(con);
 		}
 		return userList;
 	}
@@ -150,10 +173,11 @@ public class UserDaoImpl implements IUserDao {
 	@Override
 	public List<User> getActiveUsersByComment(int value) throws DaoException {
 		List<User> userList = new ArrayList<User>();
-		Connection con = DaoFactory.getConnection();
+		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
+			con = conPool.takeConnection();
 			ps = con.prepareStatement(usersByComment);
 			ps.setInt(1, value);
 			rs = ps.executeQuery();
@@ -164,17 +188,20 @@ public class UserDaoImpl implements IUserDao {
 				user.setRate(rs.getInt("Comment"));
 				userList.add(user);
 			}
+		} catch (ConnectionPoolException e) {
+			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
 				rs.close();
 				ps.close();
+				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+			} catch (ConnectionPoolException e) {
+				throw new DaoException("Can't return connection to ConnectionPool", e);
 			}
-			DaoFactory.returnConnection(con);
-
 		}
 		return userList;
 	}
