@@ -12,19 +12,24 @@ import by.trepam.karotki.ht8.dao.IAuthorDao;
 import by.trepam.karotki.ht8.dao.exception.DaoException;
 import by.trepam.karotki.ht8.entity.Author;
 
-public class AuthorDaoImpl implements IAuthorDao{
+public class AuthorDaoImpl implements IAuthorDao {
+	private static final String authorByCountry = "SELECT AuthorFirstName, AuthorLastName FROM Author "
+			+ "JOIN Country ON Country.idCountry = Author.CountryOfBirth_id " + "WHERE CountryName = ? ;";
+	private static final String authorByFilm = "SELECT AuthorFirstName, AuthorLastName, Role FROM Author "
+			+ "JOIN Film_has_Authors ON Film_has_Authors.Authors_idAuthors = Author.idAuthor "
+			+ "JOIN Film ON film.idFilm = Film_has_Authors.Film_id " + "WHERE Title = ? ORDER BY Role ;";
 
 	@Override
 	public List<Author> getAuthorListByCountry(String country) throws DaoException {
+
 		List<Author> authorList = new ArrayList<Author>();
-		String sql = "SELECT AuthorFirstName, AuthorLastName "
-				+ "FROM Author JOIN Country ON Country.idCountry = Author.CountryOfBirth_id "
-				+ " WHERE CountryName = ? ;";
-		Connection	con = DaoFactory.getConnection();
+		Connection con = DaoFactory.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
-			PreparedStatement ps = con.prepareStatement(sql);
+			ps = con.prepareStatement(authorByCountry);
 			ps.setString(1, country);
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			while (rs.next()) {
 				Author author = new Author();
 				author.setFirstName(rs.getString("AuthorFirstName"));
@@ -34,24 +39,27 @@ public class AuthorDaoImpl implements IAuthorDao{
 		} catch (SQLException e) {
 			throw new DaoException("Can't perform query", e);
 		} finally {
+			try {
+				rs.close();
+				ps.close();
+			} catch (SQLException e) {
+				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+			}
 			DaoFactory.returnConnection(con);
 		}
 		return authorList;
 	}
 
 	@Override
-	public List<Author> getAuthorListByFilm(String title)throws DaoException {
+	public List<Author> getAuthorListByFilm(String title) throws DaoException {
 		List<Author> authorList = new ArrayList<Author>();
-		String sql = "SELECT AuthorFirstName, AuthorLastName, Role "
-				+ "FROM Author JOIN Film_has_Authors ON Film_has_Authors.Authors_idAuthors = Author.idAuthor "
-				+ "JOIN Film ON film.idFilm = Film_has_Authors.Film_id "
-				+ "WHERE Title = ? "
-				+ "ORDER BY Role ;";
-		Connection 	con = DaoFactory.getConnection();
+		Connection con = DaoFactory.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
-			PreparedStatement ps = con.prepareStatement(sql);
+			ps = con.prepareStatement(authorByFilm);
 			ps.setString(1, title);
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			while (rs.next()) {
 				Author author = new Author();
 				author.setFirstName(rs.getString("AuthorFirstName"));
@@ -61,6 +69,12 @@ public class AuthorDaoImpl implements IAuthorDao{
 		} catch (SQLException e) {
 			throw new DaoException("Can't perform query", e);
 		} finally {
+			try {
+				rs.close();
+				ps.close();
+			} catch (SQLException e) {
+				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+			}
 			DaoFactory.returnConnection(con);
 		}
 		return authorList;

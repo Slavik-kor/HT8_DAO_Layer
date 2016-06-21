@@ -12,9 +12,9 @@ import by.trepam.karotki.ht8.dao.impl.UserDaoImpl;
 public class DaoFactory {
 	private static final ConnectionPool conPool = ConnectionPool.getInstance();
 	private static final DaoFactory instance = new DaoFactory();
-	private static final IAuthorDao AuthorDao = new AuthorDaoImpl();
-	private static final IFilmDao FilmDao = new FilmDaoImpl();
-	private static final IUserDao UserDao = new UserDaoImpl();
+	private static final IAuthorDao authorDao = new AuthorDaoImpl();
+	private static final IFilmDao filmDao = new FilmDaoImpl();
+	private static final IUserDao userDao = new UserDaoImpl();
 	
 	private DaoFactory() {
 		try {
@@ -52,15 +52,15 @@ public class DaoFactory {
 	}
 
 	public IAuthorDao getAuthorDao() {
-		return AuthorDao;
+		return authorDao;
 	}
 
 	public IFilmDao getFilmDao() {
-		return FilmDao;
+		return filmDao;
 	}
 
 	public IUserDao getUserDao() {
-		return UserDao;
+		return userDao;
 	}
 
 }
