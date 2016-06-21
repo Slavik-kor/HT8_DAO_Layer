@@ -23,7 +23,9 @@ public class AuthorDaoTest {
 
 	@BeforeClass
 	public static void initDaoUser() {
+		try{
 		factory = DaoFactory.getDaoFactory();
+		} catch(DaoException e) {fail("DaoException expected");}
 		aDao = factory.getAuthorDao();
 	}
 

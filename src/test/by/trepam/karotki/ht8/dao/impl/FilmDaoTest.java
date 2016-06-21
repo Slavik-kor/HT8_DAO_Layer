@@ -14,7 +14,6 @@ import by.trepam.karotki.ht8.dao.IFilmDao;
 import by.trepam.karotki.ht8.dao.exception.DaoException;
 import by.trepam.karotki.ht8.entity.Film;
 
-
 public class FilmDaoTest {
 
 	private static DaoFactory factory;
@@ -27,7 +26,11 @@ public class FilmDaoTest {
 
 	@BeforeClass
 	public static void initDaoUser() {
-		factory = DaoFactory.getDaoFactory();
+		try {
+			factory = DaoFactory.getDaoFactory();
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
 		fDao = factory.getFilmDao();
 	}
 
@@ -38,68 +41,78 @@ public class FilmDaoTest {
 
 	@Test
 	public void getFilmsByActorsTest() {
-		try{
-		fList = fDao.getFilmsByActors(firstName, lastName);
-		}catch(DaoException e){fail("DaoException expected");}
+		try {
+			fList = fDao.getFilmsByActors(firstName, lastName);
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
 		for (Film i : fList) {
 			assertNotNull("NotNull", i);
 		}
 	}
-	
+
 	@Test
 	public void getFilmsByDirectorsTest() {
-		try{
+		try {
 			fList = fDao.getFilmsByDirectors(firstName, lastName);
-			}catch(DaoException e){fail("DaoException expected");}
-		
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
+
 		for (Film i : fList) {
 			assertNotNull("NotNull", i);
 		}
 	}
-	
+
 	@Test
 	public void getFilmsByScenarioWritersTest() {
-		try{
+		try {
 			fList = fDao.getFilmsByScenarioWriters(firstName, lastName);
-			}catch(DaoException e){fail("DaoException expected");}
-		
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
+
 		for (Film i : fList) {
 			assertNotNull("NotNull", i);
 		}
 	}
-	
+
 	@Test
 	public void getFilmsByGenreTest() {
-		
-		try{
+
+		try {
 			fList = fDao.getFilmsByGenre(genre);
-			}catch(DaoException e){fail("DaoException expected");}
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
 		for (Film i : fList) {
 			assertNotNull("NotNull", i);
 		}
 	}
-	
+
 	@Test
 	public void getMostBudgetFilmsTest() {
-		try{
+		try {
 			fList = fDao.getMostBudgetFilms(top);
-			}catch(DaoException e){fail("DaoException expected");}
-		
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
+
 		for (Film i : fList) {
 			assertNotNull("NotNull", i);
 		}
 	}
-	
+
 	@Test
 	public void getMostCashBoxOfficeFilmsTest() {
-		try{
+		try {
 			fList = fDao.getMostCashBoxFilms(top);
-			}catch(DaoException e){fail("DaoException expected");}
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
 		for (Film i : fList) {
 			assertNotNull("NotNull", i);
 		}
 	}
-	
-	
 
 }

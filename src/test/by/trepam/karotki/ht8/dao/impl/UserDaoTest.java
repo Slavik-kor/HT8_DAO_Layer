@@ -25,7 +25,11 @@ public class UserDaoTest {
 
 	@BeforeClass
 	public static void initDaoUser() {
-		factory = DaoFactory.getDaoFactory();
+		try {
+			factory = DaoFactory.getDaoFactory();
+		} catch (DaoException e) {
+			fail("DaoException expected");
+		}
 		uDao = factory.getUserDao();
 	}
 

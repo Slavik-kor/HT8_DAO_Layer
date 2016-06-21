@@ -2,27 +2,31 @@ package by.trepam.karotki.ht8.dao;
 
 import by.trepam.karotki.ht8.connectionpool.ConnectionPool;
 import by.trepam.karotki.ht8.connectionpool.exception.ConnectionPoolException;
+import by.trepam.karotki.ht8.dao.exception.DaoException;
 import by.trepam.karotki.ht8.dao.impl.AuthorDaoImpl;
 import by.trepam.karotki.ht8.dao.impl.FilmDaoImpl;
 import by.trepam.karotki.ht8.dao.impl.UserDaoImpl;
 
 public class DaoFactory {
 	private static final ConnectionPool conPool = ConnectionPool.getInstance();
-	private static final DaoFactory instance = new DaoFactory();
+	private static DaoFactory instance;
 	private static final IAuthorDao authorDao = new AuthorDaoImpl();
 	private static final IFilmDao filmDao = new FilmDaoImpl();
 	private static final IUserDao userDao = new UserDaoImpl();
-	
-	private DaoFactory() {
+
+	private DaoFactory() throws DaoException{
 		try {
 			conPool.initPoolData();
 		} catch (ConnectionPoolException e) {
-			e.printStackTrace();
+			throw new DaoException("Can't initialize ConnectionPool data",e);
 		}
 
 	}
 
-	public static DaoFactory getDaoFactory() {
+	public static DaoFactory getDaoFactory() throws DaoException {
+		if (instance == null) {
+			instance = new DaoFactory();
+		}
 		return instance;
 	}
 
