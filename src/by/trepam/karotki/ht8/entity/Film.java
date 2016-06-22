@@ -1,24 +1,21 @@
 package by.trepam.karotki.ht8.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.sql.Date;
+import java.sql.Time;
 
 public class Film implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private int id;
 	private String title;
 	private String description;
 	private double budget;
 	private double boxOfficeCash;
 	private int audience;
+	private Date premierDate;
+	private Time duration;
 	private String webSite;
-	private ArrayList<Comment> comments = new ArrayList<Comment>();
-	private double rate;
-	private ArrayList<String> genre = new ArrayList<String>();
-	private ArrayList<Author> actors = new ArrayList<Author>();
-	private ArrayList<Author> directors = new ArrayList<Author>();
-	private ArrayList<Author> scenarioWriters = new ArrayList<Author>();
-	private ArrayList<String> originCountries = new ArrayList<String>();
 
 	public String getTitle() {
 		return title;
@@ -68,89 +65,51 @@ public class Film implements Serializable {
 		this.webSite = webSite;
 	}
 
-	public ArrayList<Comment> getComments() {
-		return comments;
+	public int getId() {
+		return id;
 	}
 
-	public void setComments(ArrayList<Comment> comments) {
-		this.comments = comments;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public double getRate() {
-		return rate;
+	public Date getPremierDate() {
+		return premierDate;
 	}
 
-	public void setRate(double rate) {
-		this.rate = rate;
+	public void setPremierDate(Date premierDate) {
+		this.premierDate = premierDate;
 	}
 
-	public ArrayList<String> getGenre() {
-		return genre;
+	public Time getDuration() {
+		return duration;
 	}
 
-	public void setGenre(ArrayList<String> genre) {
-		this.genre = genre;
-	}
-
-	public ArrayList<Author> getActors() {
-		return actors;
-	}
-
-	public void setActors(ArrayList<Author> actors) {
-		this.actors = actors;
-	}
-
-	public ArrayList<Author> getDirectors() {
-		return directors;
-	}
-
-	public void setDirectors(ArrayList<Author> directors) {
-		this.directors = directors;
-	}
-
-	public ArrayList<Author> getScenarioWriters() {
-		return scenarioWriters;
-	}
-
-	public void setScenarioWriters(ArrayList<Author> scenarioWriters) {
-		this.scenarioWriters = scenarioWriters;
-	}
-
-	public ArrayList<String> getOriginCountries() {
-		return originCountries;
-	}
-
-	public void setOriginCountries(ArrayList<String> originCountries) {
-		this.originCountries = originCountries;
+	public void setDuration(Time duration) {
+		this.duration = duration;
 	}
 
 	@Override
 	public String toString() {
-		return "Film [title=" + title + ", description=" + description + ", budget=" + budget + ", boxOfficeCash="
-				+ boxOfficeCash + ", audience=" + audience + ", webSite=" + webSite + ", comments=" + comments
-				+ ", rate=" + rate + ", genre=" + genre + ", actors=" + actors + ", directors=" + directors
-				+ ", scenarioWriters=" + scenarioWriters + ", originCountries=" + originCountries + "]";
+		return "Film [id=" + id + ", title=" + title + ", description=" + description + ", budget=" + budget
+				+ ", boxOfficeCash=" + boxOfficeCash + ", audience=" + audience + ", premierDate=" + premierDate
+				+ ", duration=" + duration + ", webSite=" + webSite + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((actors == null) ? 0 : actors.hashCode());
 		result = prime * result + audience;
 		long temp;
 		temp = Double.doubleToLongBits(boxOfficeCash);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(budget);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((directors == null) ? 0 : directors.hashCode());
-		result = prime * result + ((genre == null) ? 0 : genre.hashCode());
-		result = prime * result + ((originCountries == null) ? 0 : originCountries.hashCode());
-		temp = Double.doubleToLongBits(rate);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((scenarioWriters == null) ? 0 : scenarioWriters.hashCode());
+		result = prime * result + ((duration == null) ? 0 : duration.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((premierDate == null) ? 0 : premierDate.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + ((webSite == null) ? 0 : webSite.hashCode());
 		return result;
@@ -165,48 +124,28 @@ public class Film implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Film other = (Film) obj;
-		if (actors == null) {
-			if (other.actors != null)
-				return false;
-		} else if (!actors.equals(other.actors))
-			return false;
 		if (audience != other.audience)
 			return false;
 		if (Double.doubleToLongBits(boxOfficeCash) != Double.doubleToLongBits(other.boxOfficeCash))
 			return false;
 		if (Double.doubleToLongBits(budget) != Double.doubleToLongBits(other.budget))
 			return false;
-		if (comments == null) {
-			if (other.comments != null)
-				return false;
-		} else if (!comments.equals(other.comments))
-			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (directors == null) {
-			if (other.directors != null)
+		if (duration == null) {
+			if (other.duration != null)
 				return false;
-		} else if (!directors.equals(other.directors))
+		} else if (!duration.equals(other.duration))
 			return false;
-		if (genre == null) {
-			if (other.genre != null)
+		if (id != other.id)
+			return false;
+		if (premierDate == null) {
+			if (other.premierDate != null)
 				return false;
-		} else if (!genre.equals(other.genre))
-			return false;
-		if (originCountries == null) {
-			if (other.originCountries != null)
-				return false;
-		} else if (!originCountries.equals(other.originCountries))
-			return false;
-		if (Double.doubleToLongBits(rate) != Double.doubleToLongBits(other.rate))
-			return false;
-		if (scenarioWriters == null) {
-			if (other.scenarioWriters != null)
-				return false;
-		} else if (!scenarioWriters.equals(other.scenarioWriters))
+		} else if (!premierDate.equals(other.premierDate))
 			return false;
 		if (title == null) {
 			if (other.title != null)

@@ -9,42 +9,49 @@ import java.util.List;
 
 import by.trepam.karotki.ht8.connectionpool.ConnectionPool;
 import by.trepam.karotki.ht8.connectionpool.exception.ConnectionPoolException;
-import by.trepam.karotki.ht8.dao.IUserDao;
+import by.trepam.karotki.ht8.dao.IAccountDao;
 import by.trepam.karotki.ht8.dao.exception.DaoException;
-import by.trepam.karotki.ht8.entity.User;
+import by.trepam.karotki.ht8.entity.Account;
 
-public class UserDaoImpl implements IUserDao {
+public class AccountDaoImpl implements IAccountDao {
 	private ConnectionPool conPool = ConnectionPool.getInstance();
-	
-	private static final String usersByCity = "SELECT AccountFirstName, AccountLastName FROM Account "
-			+ "JOIN City ON City.idCity = Account.City_id " + "WHERE CityName = ? ;";
-	private static final String usersByCountry = "SELECT AccountFirstName, AccountLastName FROM Account "
-			+ "JOIN City ON City.idCity = Account.City_id " + "JOIN Country ON Country.idCountry = City.Country_id "
+
+	private static final String ACCOUNT_BY_CITY = "SELECT AccountFirstName, AccountLastName FROM Account "
+			+ "JOIN City ON City.idCity = Account.City_id "
+			+ "WHERE CityName = ? ;";
+	private static final String ACCOUNT_BY_COUNTRY = "SELECT AccountFirstName, AccountLastName FROM Account "
+			+ "JOIN City ON City.idCity = Account.City_id "
+			+ "JOIN Country ON Country.idCountry = City.Country_id "
 			+ "WHERE CountryName = ? ;";
-	private static final String BannedUsers = "SELECT AccountFirstName, AccountLastName FROM Account "
+	private static final String BANNED_ACCOUNT = "SELECT AccountFirstName, AccountLastName FROM Account "
 			+ " WHERE AccountActive = 'false' ;";
-	private static final String usersByRate = "SELECT AccountFirstName, AccountLastName, COUNT(Rate) Rate FROM Account "
-			+ "JOIN Rate ON Rate.Account_id = Account.idAccount " + "GROUP BY AccountFirstName "
+	private static final String ACCOUNT_BY_RATE = "SELECT AccountFirstName, AccountLastName, COUNT(Rate) Rate FROM Account "
+			+ "JOIN Rate ON Rate.Account_id = Account.idAccount " 
+			+ "GROUP BY AccountFirstName "
 			+ "ORDER BY Rate DESC LIMIT ? ;";
-	private static final String usersByComment = "SELECT AccountFirstName, AccountLastName, COUNT(CommentText) Comment FROM Account "
-			+ "JOIN Comment ON Comment.Account_id = Account.idAccount " + "GROUP BY AccountFirstName "
+	private static final String ACCOUNT_BY_COMMENT = "SELECT AccountFirstName, AccountLastName, COUNT(CommentText) Comment FROM Account "
+			+ "JOIN Comment ON Comment.Account_id = Account.idAccount " 
+			+ "GROUP BY AccountFirstName "
 			+ "ORDER BY Comment DESC LIMIT ? ;";
 
+	private static final String FIRST_NAME = "AccountFirstName";
+	private static final String LAST_NAME = "AccountLastName";
+	
 	@Override
-	public List<User> getUsersByCity(String city) throws DaoException {
-		List<User> userList = new ArrayList<User>();
+	public List<Account> getUsersByCity(String city) throws DaoException {
+		List<Account> userList = new ArrayList<Account>();
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(usersByCity);
+			ps = con.prepareStatement(ACCOUNT_BY_CITY);
 			ps.setString(1, city);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				User user = new User();
-				user.setFirstName(rs.getString("AccountFirstName"));
-				user.setLastName(rs.getString("AccountLastName"));
+				Account user = new Account();
+				user.setFirstName(rs.getString(FIRST_NAME));
+				user.setLastName(rs.getString(LAST_NAME));
 				userList.add(user);
 			}
 		} catch (ConnectionPoolException e) {
@@ -66,20 +73,20 @@ public class UserDaoImpl implements IUserDao {
 	}
 
 	@Override
-	public List<User> getUsersByCountry(String country) throws DaoException {
-		List<User> userList = new ArrayList<User>();
+	public List<Account> getUsersByCountry(String country) throws DaoException {
+		List<Account> userList = new ArrayList<Account>();
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(usersByCountry);
+			ps = con.prepareStatement(ACCOUNT_BY_COUNTRY);
 			ps.setString(1, country);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				User user = new User();
-				user.setFirstName(rs.getString("AccountFirstName"));
-				user.setLastName(rs.getString("AccountLastName"));
+				Account user = new Account();
+				user.setFirstName(rs.getString(FIRST_NAME));
+				user.setLastName(rs.getString(LAST_NAME));
 				userList.add(user);
 			}
 		} catch (ConnectionPoolException e) {
@@ -101,19 +108,19 @@ public class UserDaoImpl implements IUserDao {
 	}
 
 	@Override
-	public List<User> getBannedUsers() throws DaoException {
-		List<User> userList = new ArrayList<User>();
+	public List<Account> getBannedUsers() throws DaoException {
+		List<Account> userList = new ArrayList<Account>();
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(BannedUsers);
+			ps = con.prepareStatement(BANNED_ACCOUNT);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				User user = new User();
-				user.setFirstName(rs.getString("AccountFirstName"));
-				user.setLastName(rs.getString("AccountLastName"));
+				Account user = new Account();
+				user.setFirstName(rs.getString(FIRST_NAME));
+				user.setLastName(rs.getString(LAST_NAME));
 				userList.add(user);
 			}
 		} catch (ConnectionPoolException e) {
@@ -135,21 +142,20 @@ public class UserDaoImpl implements IUserDao {
 	}
 
 	@Override
-	public List<User> getActiveUsersByRate(int value) throws DaoException {
-		List<User> userList = new ArrayList<User>();
+	public List<Account> getActiveUsersByRate(int value) throws DaoException {
+		List<Account> userList = new ArrayList<Account>();
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(usersByRate);
+			ps = con.prepareStatement(ACCOUNT_BY_RATE);
 			ps.setInt(1, value);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				User user = new User();
-				user.setFirstName(rs.getString("AccountFirstName"));
-				user.setLastName(rs.getString("AccountLastName"));
-				user.setRate(rs.getInt("Rate"));
+				Account user = new Account();
+				user.setFirstName(rs.getString(FIRST_NAME));
+				user.setLastName(rs.getString(LAST_NAME));
 				userList.add(user);
 			}
 		} catch (ConnectionPoolException e) {
@@ -162,30 +168,29 @@ public class UserDaoImpl implements IUserDao {
 				ps.close();
 				conPool.returnConnection(con);
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+				throw new DaoException("Can't close PreparedStatement or ResultSet", e);// log
 			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
+				throw new DaoException("Can't return connection to ConnectionPool", e);// log
 			}
 		}
 		return userList;
 	}
 
 	@Override
-	public List<User> getActiveUsersByComment(int value) throws DaoException {
-		List<User> userList = new ArrayList<User>();
+	public List<Account> getActiveUsersByComment(int value) throws DaoException {
+		List<Account> userList = new ArrayList<Account>();
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(usersByComment);
+			ps = con.prepareStatement(ACCOUNT_BY_COMMENT);
 			ps.setInt(1, value);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				User user = new User();
-				user.setFirstName(rs.getString("AccountFirstName"));
-				user.setLastName(rs.getString("AccountLastName"));
-				user.setRate(rs.getInt("Comment"));
+				Account user = new Account();
+				user.setFirstName(rs.getString(FIRST_NAME));
+				user.setLastName(rs.getString(LAST_NAME));
 				userList.add(user);
 			}
 		} catch (ConnectionPoolException e) {
@@ -198,9 +203,9 @@ public class UserDaoImpl implements IUserDao {
 				ps.close();
 				conPool.returnConnection(con);
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+				throw new DaoException("Can't close PreparedStatement or ResultSet", e);// log
 			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
+				throw new DaoException("Can't return connection to ConnectionPool", e);// log
 			}
 		}
 		return userList;

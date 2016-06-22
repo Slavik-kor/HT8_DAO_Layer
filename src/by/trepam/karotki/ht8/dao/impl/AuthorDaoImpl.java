@@ -16,12 +16,15 @@ import by.trepam.karotki.ht8.entity.Author;
 public class AuthorDaoImpl implements IAuthorDao {
 	private ConnectionPool conPool = ConnectionPool.getInstance();
 	
-	private static final String authorByCountry = "SELECT AuthorFirstName, AuthorLastName FROM Author "
+	private static final String AUTHOR_BY_COUNTRY = "SELECT AuthorFirstName, AuthorLastName FROM Author "
 			+ "JOIN Country ON Country.idCountry = Author.CountryOfBirth_id " + "WHERE CountryName = ? ;";
 	
-	private static final String authorByFilm = "SELECT AuthorFirstName, AuthorLastName, Role FROM Author "
+	private static final String AUTHOR_BY_FILM = "SELECT AuthorFirstName, AuthorLastName, Role FROM Author "
 			+ "JOIN Film_has_Authors ON Film_has_Authors.Authors_idAuthors = Author.idAuthor "
 			+ "JOIN Film ON film.idFilm = Film_has_Authors.Film_id " + "WHERE Title = ? ORDER BY Role ;";
+	
+	private static final String FIRST_NAME = "AuthorFirstName";
+	private static final String LAST_NAME = "AuthorLastName";
 
 	@Override
 	public List<Author> getAuthorListByCountry(String country) throws DaoException {
@@ -32,13 +35,13 @@ public class AuthorDaoImpl implements IAuthorDao {
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(authorByCountry);
+			ps = con.prepareStatement(AUTHOR_BY_COUNTRY);
 			ps.setString(1, country);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Author author = new Author();
-				author.setFirstName(rs.getString("AuthorFirstName"));
-				author.setLastName(rs.getString("AuthorLastName"));
+				author.setFirstName(rs.getString(FIRST_NAME));
+				author.setLastName(rs.getString(LAST_NAME));
 				authorList.add(author);
 			}
 		} catch (SQLException e) {
@@ -68,13 +71,13 @@ public class AuthorDaoImpl implements IAuthorDao {
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(authorByFilm);
+			ps = con.prepareStatement(AUTHOR_BY_FILM);
 			ps.setString(1, title);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Author author = new Author();
-				author.setFirstName(rs.getString("AuthorFirstName"));
-				author.setLastName(rs.getString("AuthorLastName"));
+				author.setFirstName(rs.getString(FIRST_NAME));
+				author.setLastName(rs.getString(LAST_NAME));
 				authorList.add(author);
 			}
 		} catch (SQLException e) {

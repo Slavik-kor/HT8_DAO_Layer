@@ -16,32 +16,36 @@ import by.trepam.karotki.ht8.entity.Film;
 public class FilmDaoImpl implements IFilmDao {
 	private ConnectionPool conPool = ConnectionPool.getInstance();
 
-	private static final String filmByRating = "SELECT Title, ROUND(AVG(Rate),2) Rating FROM film "
+	private static final String FILM_BY_RATING = "SELECT Title, ROUND(AVG(Rate),2) Rating FROM film "
 			+ "JOIN rate ON rate.Film_id = film.idFilm " + "GROUP BY Title " + "ORDER BY Rating DESC LIMIT ? ;";
 
-	private static final String filmByActor = "SELECT Title FROM film "
+	private static final String FILM_BY_ACTOR = "SELECT Title FROM film "
 			+ "JOIN Film_has_Authors ON Film_has_Authors.Film_id = film.idFilm "
 			+ "JOIN Author ON Author.idAuthor = Film_has_Authors.Authors_idAuthors "
 			+ "WHERE (AuthorFirstName = ?) AND (AuthorLastName = ?) AND (Role = 'Actor');";
 
-	private static final String filmByDirector = "SELECT Title FROM film "
+	private static final String FILM_BY_DIRECTOR = "SELECT Title FROM film "
 			+ "JOIN Film_has_Authors ON Film_has_Authors.Film_id = film.idFilm "
 			+ "JOIN Author ON Author.idAuthor = Film_has_Authors.Authors_idAuthors "
 			+ "WHERE (AuthorFirstName = ?) AND (AuthorLastName = ?) AND (Role = 'Director');";
 
-	private static final String filmByScenarioWriter = "SELECT Title FROM film "
+	private static final String FILM_BY_SCENARIO_WRITER = "SELECT Title FROM film "
 			+ "JOIN Film_has_Authors ON Film_has_Authors.Film_id = film.idFilm "
 			+ "JOIN Author ON Author.idAuthor = Film_has_Authors.Authors_idAuthors "
 			+ "WHERE (AuthorFirstName = ?) AND (AuthorLastName = ?) AND (Role = 'ScenarioWriter');";
 
-	private static final String filmByGenre = "SELECT Title FROM film "
+	private static final String FILM_BY_GENRE = "SELECT Title FROM film "
 			+ "JOIN Film_Genre ON Film_Genre.Film_id = film.idFilm "
 			+ "JOIN Genre ON Genre.idGenre = Film_Genre.Genre_id " + "WHERE Name = ? ;";
 
-	private static final String filmByBudget = "SELECT Title, Budget FROM film " + "ORDER BY Budget DESC LIMIT ? ;";
+	private static final String FILM_BY_BUDGET = "SELECT Title, Budget FROM film " + "ORDER BY Budget DESC LIMIT ? ;";
 
-	private static final String mostCashBoxFilm = "SELECT Title, BoxOfficeCash FROM film "
+	private static final String FILM_BY_BOX_OFFICE_CASH = "SELECT Title, BoxOfficeCash FROM film "
 			+ "ORDER BY BoxOfficeCash DESC LIMIT ?";
+	
+	private static final String TITLE = "Title";
+	private static final String BUDGET = "Budget";
+	private static final String BOX_OFFICE_CASH = "BoxOfficeCash";
 
 	@Override
 	public List<Film> getTopFilmsByRating(int value) throws DaoException {
@@ -51,13 +55,12 @@ public class FilmDaoImpl implements IFilmDao {
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(filmByRating);
+			ps = con.prepareStatement(FILM_BY_RATING);
 			ps.setInt(1, value);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Film film = new Film();
-				film.setTitle(rs.getString("Title"));
-				film.setRate(rs.getDouble("Rating"));
+				film.setTitle(rs.getString(TITLE));
 				filmList.add(film);
 			}
 		} catch (ConnectionPoolException e) {
@@ -87,13 +90,13 @@ public class FilmDaoImpl implements IFilmDao {
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(filmByActor);
+			ps = con.prepareStatement(FILM_BY_ACTOR);
 			ps.setString(1, firstName);
 			ps.setString(2, lastName);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Film film = new Film();
-				film.setTitle(rs.getString("Title"));
+				film.setTitle(rs.getString(TITLE));
 				filmList.add(film);
 			}
 		} catch (ConnectionPoolException e) {
@@ -123,13 +126,13 @@ public class FilmDaoImpl implements IFilmDao {
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(filmByDirector);
+			ps = con.prepareStatement(FILM_BY_DIRECTOR);
 			ps.setString(1, firstName);
 			ps.setString(2, lastName);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Film film = new Film();
-				film.setTitle(rs.getString("Title"));
+				film.setTitle(rs.getString(TITLE));
 				filmList.add(film);
 			}
 		} catch (ConnectionPoolException e) {
@@ -159,13 +162,13 @@ public class FilmDaoImpl implements IFilmDao {
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(filmByScenarioWriter);
+			ps = con.prepareStatement(FILM_BY_SCENARIO_WRITER);
 			ps.setString(1, firstName);
 			ps.setString(2, lastName);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Film film = new Film();
-				film.setTitle(rs.getString("Title"));
+				film.setTitle(rs.getString(TITLE));
 				filmList.add(film);
 			}
 		} catch (ConnectionPoolException e) {
@@ -196,12 +199,12 @@ public class FilmDaoImpl implements IFilmDao {
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(filmByGenre);
+			ps = con.prepareStatement(FILM_BY_GENRE);
 			ps.setString(1, genre);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Film film = new Film();
-				film.setTitle(rs.getString("Title"));
+				film.setTitle(rs.getString(TITLE));
 				filmList.add(film);
 			}
 		} catch (ConnectionPoolException e) {
@@ -231,13 +234,13 @@ public class FilmDaoImpl implements IFilmDao {
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(filmByBudget);
+			ps = con.prepareStatement(FILM_BY_BUDGET);
 			ps.setInt(1, value);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Film film = new Film();
-				film.setTitle(rs.getString("Title"));
-				film.setBudget(rs.getDouble("Budget"));
+				film.setTitle(rs.getString(TITLE));
+				film.setBudget(rs.getDouble(BUDGET));
 				filmList.add(film);
 			}
 		} catch (ConnectionPoolException e) {
@@ -267,13 +270,13 @@ public class FilmDaoImpl implements IFilmDao {
 		ResultSet rs = null;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(mostCashBoxFilm);
+			ps = con.prepareStatement(FILM_BY_BOX_OFFICE_CASH);
 			ps.setInt(1, value);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Film film = new Film();
-				film.setTitle(rs.getString("Title"));
-				film.setBoxOfficeCash(rs.getDouble("BoxOfficeCash"));
+				film.setTitle(rs.getString(TITLE));
+				film.setBoxOfficeCash(rs.getDouble(BOX_OFFICE_CASH));
 				filmList.add(film);
 			}
 		} catch (ConnectionPoolException e) {

@@ -1,20 +1,22 @@
 package by.trepam.karotki.ht8.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.sql.Date;
 
-public class User implements Serializable {
+public class Account implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private int id;
 	private String firstName;
 	private String lastName;
+	private Date birthDay;
 	private String email;
+	private Date creationDate;
 	private String login;
+	private String password;
 	private String Role;
 	private boolean active;
-	private String city;
-	private int rate;
-	private ArrayList<Comment> comments = new ArrayList<Comment>();
+	private int cityId;
 
 	public String getFirstName() {
 		return firstName;
@@ -64,27 +66,51 @@ public class User implements Serializable {
 		this.active = active;
 	}
 
-	public String getCity() {
-		return city;
+	public int getId() {
+		return id;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public ArrayList<Comment> getComments() {
-		return comments;
+	public Date getBirthDay() {
+		return birthDay;
 	}
 
-	public void setComments(ArrayList<Comment> comments) {
-		this.comments = comments;
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public int getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(int cityId) {
+		this.cityId = cityId;
 	}
 
 	@Override
 	public String toString() {
-		return "User [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", login=" + login
-				+ ", Role=" + Role + ", active=" + active + ", city=" + city + ", rate=" + rate + ", comments="
-				+ comments + "]";
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDay=" + birthDay
+				+ ", email=" + email + ", creationDate=" + creationDate + ", login=" + login + ", password=" + password
+				+ ", Role=" + Role + ", active=" + active + ", cityId=" + cityId + "]";
 	}
 
 	@Override
@@ -93,13 +119,15 @@ public class User implements Serializable {
 		int result = 1;
 		result = prime * result + ((Role == null) ? 0 : Role.hashCode());
 		result = prime * result + (active ? 1231 : 1237);
-		result = prime * result + ((city == null) ? 0 : city.hashCode());
-		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+		result = prime * result + ((birthDay == null) ? 0 : birthDay.hashCode());
+		result = prime * result + cityId;
+		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + id;
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
-		result = prime * result + rate;
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		return result;
 	}
 
@@ -111,7 +139,7 @@ public class User implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		Account other = (Account) obj;
 		if (Role == null) {
 			if (other.Role != null)
 				return false;
@@ -119,15 +147,17 @@ public class User implements Serializable {
 			return false;
 		if (active != other.active)
 			return false;
-		if (city == null) {
-			if (other.city != null)
+		if (birthDay == null) {
+			if (other.birthDay != null)
 				return false;
-		} else if (!city.equals(other.city))
+		} else if (!birthDay.equals(other.birthDay))
 			return false;
-		if (comments == null) {
-			if (other.comments != null)
+		if (cityId != other.cityId)
+			return false;
+		if (creationDate == null) {
+			if (other.creationDate != null)
 				return false;
-		} else if (!comments.equals(other.comments))
+		} else if (!creationDate.equals(other.creationDate))
 			return false;
 		if (email == null) {
 			if (other.email != null)
@@ -139,6 +169,8 @@ public class User implements Serializable {
 				return false;
 		} else if (!firstName.equals(other.firstName))
 			return false;
+		if (id != other.id)
+			return false;
 		if (lastName == null) {
 			if (other.lastName != null)
 				return false;
@@ -149,17 +181,12 @@ public class User implements Serializable {
 				return false;
 		} else if (!login.equals(other.login))
 			return false;
-		if (rate != other.rate)
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
 			return false;
 		return true;
-	}
-
-	public int getRate() {
-		return rate;
-	}
-
-	public void setRate(int rate) {
-		this.rate = rate;
 	}
 
 }

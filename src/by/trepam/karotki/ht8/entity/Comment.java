@@ -1,14 +1,15 @@
 package by.trepam.karotki.ht8.entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class Comment implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String comment;
-	private String firstName;
-	private String lastName;
-	private String filmTitle;
+	private Date commentDate;
+	private int accountId;
+	private int filmId;
 
 	public String getComment() {
 		return comment;
@@ -18,44 +19,44 @@ public class Comment implements Serializable {
 		this.comment = comment;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public Date getCommentDate() {
+		return commentDate;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setCommentDate(Date commentDate) {
+		this.commentDate = commentDate;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public int getAccountId() {
+		return accountId;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setAccountId(int accountId) {
+		this.accountId = accountId;
 	}
 
-	public String getFilmTitle() {
-		return filmTitle;
+	public int getFilmId() {
+		return filmId;
 	}
 
-	public void setFilmTitle(String filmTitle) {
-		this.filmTitle = filmTitle;
+	public void setFilmId(int filmId) {
+		this.filmId = filmId;
 	}
 
 	@Override
 	public String toString() {
-		return "Comment [comment=" + comment + ", firstName=" + firstName + ", lastName=" + lastName + ", filmTitle="
-				+ filmTitle + "]";
+		return "Comment [comment=" + comment + ", commentDate=" + commentDate + ", accountId=" + accountId + ", filmId="
+				+ filmId + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + accountId;
 		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
-		result = prime * result + ((filmTitle == null) ? 0 : filmTitle.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((commentDate == null) ? 0 : commentDate.hashCode());
+		result = prime * result + filmId;
 		return result;
 	}
 
@@ -68,27 +69,23 @@ public class Comment implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Comment other = (Comment) obj;
+		if (accountId != other.accountId)
+			return false;
 		if (comment == null) {
 			if (other.comment != null)
 				return false;
 		} else if (!comment.equals(other.comment))
 			return false;
-		if (filmTitle == null) {
-			if (other.filmTitle != null)
+		if (commentDate == null) {
+			if (other.commentDate != null)
 				return false;
-		} else if (!filmTitle.equals(other.filmTitle))
+		} else if (!commentDate.equals(other.commentDate))
 			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
+		if (filmId != other.filmId)
 			return false;
 		return true;
 	}
+
+	
 
 }

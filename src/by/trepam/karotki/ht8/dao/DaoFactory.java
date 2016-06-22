@@ -5,14 +5,14 @@ import by.trepam.karotki.ht8.connectionpool.exception.ConnectionPoolException;
 import by.trepam.karotki.ht8.dao.exception.DaoException;
 import by.trepam.karotki.ht8.dao.impl.AuthorDaoImpl;
 import by.trepam.karotki.ht8.dao.impl.FilmDaoImpl;
-import by.trepam.karotki.ht8.dao.impl.UserDaoImpl;
+import by.trepam.karotki.ht8.dao.impl.AccountDaoImpl;
 
 public class DaoFactory {
 	private static final ConnectionPool conPool = ConnectionPool.getInstance();
 	private static DaoFactory instance;
 	private static final IAuthorDao authorDao = new AuthorDaoImpl();
 	private static final IFilmDao filmDao = new FilmDaoImpl();
-	private static final IUserDao userDao = new UserDaoImpl();
+	private static final IAccountDao userDao = new AccountDaoImpl();
 
 	private DaoFactory() throws DaoException{
 		try {
@@ -20,7 +20,6 @@ public class DaoFactory {
 		} catch (ConnectionPoolException e) {
 			throw new DaoException("Can't initialize ConnectionPool data",e);
 		}
-
 	}
 
 	public static DaoFactory getDaoFactory() throws DaoException {
@@ -38,7 +37,7 @@ public class DaoFactory {
 		return filmDao;
 	}
 
-	public IUserDao getUserDao() {
+	public IAccountDao getUserDao() {
 		return userDao;
 	}
 

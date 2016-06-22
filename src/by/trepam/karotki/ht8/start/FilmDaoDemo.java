@@ -18,7 +18,7 @@ public class FilmDaoDemo {
 		fList = fDao.getTopFilmsByRating(5);
 
 		for (Film i : fList) {
-			System.out.println(i.getTitle() + "  " + i.getRate());
+			System.out.println(i.getTitle());
 		}
 
 		System.out.println("---------------------------------------");

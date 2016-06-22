@@ -11,14 +11,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import by.trepam.karotki.ht8.dao.DaoFactory;
-import by.trepam.karotki.ht8.dao.IUserDao;
+import by.trepam.karotki.ht8.dao.IAccountDao;
 import by.trepam.karotki.ht8.dao.exception.DaoException;
-import by.trepam.karotki.ht8.entity.User;
+import by.trepam.karotki.ht8.entity.Account;
 
 public class UserDaoTest {
 	private static DaoFactory factory;
-	private static IUserDao uDao;
-	private List<User> uList;
+	private static IAccountDao uDao;
+	private List<Account> uList;
 	private static final String city = "Минск";
 	private static final String country = "Беларусь";
 	private static final int top = 5;
@@ -46,7 +46,7 @@ public class UserDaoTest {
 		} catch (DaoException e) {
 			fail("DaoException expected");
 		}
-		for (User i : uList) {
+		for (Account i : uList) {
 			assertNotNull("NotNull", i);
 		}
 	}
@@ -58,7 +58,7 @@ public class UserDaoTest {
 		} catch (DaoException e) {
 			fail("DaoException expected");
 		}
-		for (User i : uList) {
+		for (Account i : uList) {
 			assertNotNull("NotNull", i);
 		}
 	}
@@ -70,7 +70,7 @@ public class UserDaoTest {
 		} catch (DaoException e) {
 			fail("DaoException expected");
 		}
-		for (User i : uList) {
+		for (Account i : uList) {
 			assertEquals(false, i.isActive());
 		}
 	}
@@ -82,7 +82,7 @@ public class UserDaoTest {
 		} catch (DaoException e) {
 			fail("DaoException expected");
 		}
-		for (User i : uList) {
+		for (Account i : uList) {
 			assertNotNull("NotNull", i);
 		}
 	}
@@ -94,7 +94,7 @@ public class UserDaoTest {
 		} catch (DaoException e) {
 			fail("DaoException expected");
 		}
-		for (User i : uList) {
+		for (Account i : uList) {
 			assertNotNull("NotNull", i);
 		}
 	}
