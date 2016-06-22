@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.trepam.karotki.ht8.connectionpool.ConnectionPool;
 import by.trepam.karotki.ht8.connectionpool.exception.ConnectionPoolException;
 import by.trepam.karotki.ht8.dao.IFilmDao;
@@ -14,6 +17,7 @@ import by.trepam.karotki.ht8.dao.exception.DaoException;
 import by.trepam.karotki.ht8.entity.Film;
 
 public class FilmDaoImpl implements IFilmDao {
+	private static final Logger LOG = LogManager.getLogger();
 	private ConnectionPool conPool = ConnectionPool.getInstance();
 
 	private static final String FILM_BY_RATING = "SELECT Title, ROUND(AVG(Rate),2) Rating FROM film "
@@ -42,7 +46,7 @@ public class FilmDaoImpl implements IFilmDao {
 
 	private static final String FILM_BY_BOX_OFFICE_CASH = "SELECT Title, BoxOfficeCash FROM film "
 			+ "ORDER BY BoxOfficeCash DESC LIMIT ?";
-	
+
 	private static final String TITLE = "Title";
 	private static final String BUDGET = "Budget";
 	private static final String BOX_OFFICE_CASH = "BoxOfficeCash";
@@ -71,13 +75,10 @@ public class FilmDaoImpl implements IFilmDao {
 			try {
 				rs.close();
 				ps.close();
-				conPool.returnConnection(con);
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
+				LOG.warn("Can't close PreparedStatement or ResultSet");
 			}
-
+			conPool.returnConnection(con);
 		}
 		return filmList;
 	}
@@ -102,18 +103,15 @@ public class FilmDaoImpl implements IFilmDao {
 		} catch (ConnectionPoolException e) {
 			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
-			// log
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
 				rs.close();
 				ps.close();
-				conPool.returnConnection(con);
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
+				LOG.warn("Can't close PreparedStatement or ResultSet");
 			}
+			conPool.returnConnection(con);
 		}
 		return filmList;
 	}
@@ -138,18 +136,15 @@ public class FilmDaoImpl implements IFilmDao {
 		} catch (ConnectionPoolException e) {
 			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
-			// log
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
 				rs.close();
 				ps.close();
-				conPool.returnConnection(con);
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
-			}
+				LOG.warn("Can't close PreparedStatement or ResultSet");
+			} 
+			conPool.returnConnection(con);
 		}
 		return filmList;
 	}
@@ -174,18 +169,15 @@ public class FilmDaoImpl implements IFilmDao {
 		} catch (ConnectionPoolException e) {
 			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
-			// log
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
 				rs.close();
 				ps.close();
-				conPool.returnConnection(con);
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
-			}
+				LOG.warn("Can't close PreparedStatement or ResultSet");
+			} 
+			conPool.returnConnection(con);
 		}
 		return filmList;
 	}
@@ -210,7 +202,6 @@ public class FilmDaoImpl implements IFilmDao {
 		} catch (ConnectionPoolException e) {
 			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
-			// log
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
@@ -218,10 +209,8 @@ public class FilmDaoImpl implements IFilmDao {
 				ps.close();
 				conPool.returnConnection(con);
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
-			}
+				LOG.warn("Can't close PreparedStatement or ResultSet");
+			} 
 		}
 		return filmList;
 	}
@@ -246,19 +235,16 @@ public class FilmDaoImpl implements IFilmDao {
 		} catch (ConnectionPoolException e) {
 			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
-			// log
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
 				rs.close();
 				ps.close();
-				conPool.returnConnection(con);
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
-			}
+				LOG.warn("Can't close PreparedStatement or ResultSet");
+			} 
 		}
+		conPool.returnConnection(con);
 		return filmList;
 	}
 
@@ -282,18 +268,15 @@ public class FilmDaoImpl implements IFilmDao {
 		} catch (ConnectionPoolException e) {
 			throw new DaoException("Can't get connection from ConnectionPool", e);
 		} catch (SQLException e) {
-			// log
 			throw new DaoException("Can't perform query", e);
 		} finally {
 			try {
 				rs.close();
 				ps.close();
-				conPool.returnConnection(con);
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
-			}
+				LOG.warn("Can't close PreparedStatement or ResultSet");
+			} 
+			conPool.returnConnection(con);
 		}
 		return filmList;
 	}

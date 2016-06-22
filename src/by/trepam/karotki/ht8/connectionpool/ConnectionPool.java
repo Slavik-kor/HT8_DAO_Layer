@@ -6,9 +6,12 @@ import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import by.trepam.karotki.ht8.connectionpool.exception.ConnectionPoolException;
 
 public final class ConnectionPool {
+	private static final Logger LOG = LogManager.getLogger(ConnectionPool.class);
 
 	private BlockingQueue<Connection> connectionQueue;
 	private BlockingQueue<Connection> givenAwayConQueue;
@@ -50,50 +53,60 @@ public final class ConnectionPool {
 				connectionQueue.add(connection);
 			}
 		} catch (SQLException e) {
-			throw new ConnectionPoolException("SQLException in ConnectionPool", e);
+			throw new ConnectionPoolException("Can't get and add new connection in pool.", e);
 
 		} catch (ClassNotFoundException e) {
-			throw new ConnectionPoolException("Can't find database driver class", e);
+			throw new ConnectionPoolException("Can't find database driver class.", e);
 		}
 
 	}
 
 	public Connection takeConnection() throws ConnectionPoolException {
-		Connection connection = null;
+		Connection con = null;
 		try {
-			connection = connectionQueue.take();
-			givenAwayConQueue.add(connection);
+			if (!connectionQueue.isEmpty()) {
+				con = connectionQueue.take();
+				givenAwayConQueue.add(con);
+			} else {
+				con = DriverManager.getConnection(url, user, password);
+			}
 		} catch (InterruptedException e) {
 			throw new ConnectionPoolException("Error connecting to the data source.", e);
+		} catch (SQLException e) {
+			throw new ConnectionPoolException("Can't get new connection.", e);
 		}
-		return connection;
+		return con;
 	}
 
-	public boolean returnConnection(Connection con) throws ConnectionPoolException {
+	public boolean returnConnection(Connection con) {
 		boolean ret = false;
 		if (givenAwayConQueue.contains(con)) {
 			givenAwayConQueue.remove(con);
 			connectionQueue.offer(con);
 			ret = true;
 		} else {
-			throw new ConnectionPoolException("Connection couldn't be return");
+			try {
+				con.close();
+			} catch (SQLException e) {
+				LOG.warn("Can't close connection!");
+			}
 		}
 		return ret;
 	}
 
 	public void dispose() throws ConnectionPoolException {
-		try {
-			closeConnectionsQueue(givenAwayConQueue);
-			closeConnectionsQueue(connectionQueue);
-		} catch (SQLException e) {
-			throw new ConnectionPoolException("Can't clear ConnectionQueue");
-		}
+		closeConnectionsQueue(givenAwayConQueue);
+		closeConnectionsQueue(connectionQueue);
 	}
 
-	private void closeConnectionsQueue(BlockingQueue<Connection> queue) throws SQLException {
-		Connection connection;
-		while ((connection = queue.poll()) != null) {
-			connection.close();
+	private void closeConnectionsQueue(BlockingQueue<Connection> queue) {
+		Connection con;
+		while ((con = queue.poll()) != null) {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				LOG.warn("Can't close connection!");
+			}
 		}
 	}
 

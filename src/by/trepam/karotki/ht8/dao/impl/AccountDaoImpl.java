@@ -65,9 +65,7 @@ public class AccountDaoImpl implements IAccountDao {
 				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
-			}
+			} 
 		}
 		return userList;
 	}
@@ -100,9 +98,7 @@ public class AccountDaoImpl implements IAccountDao {
 				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
-			}
+			} 
 		}
 		return userList;
 	}
@@ -134,9 +130,7 @@ public class AccountDaoImpl implements IAccountDao {
 				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
-			}
+			} 
 		}
 		return userList;
 	}
@@ -169,9 +163,7 @@ public class AccountDaoImpl implements IAccountDao {
 				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);// log
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);// log
-			}
+			} 
 		}
 		return userList;
 	}
@@ -204,9 +196,7 @@ public class AccountDaoImpl implements IAccountDao {
 				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);// log
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);// log
-			}
+			} 
 		}
 		return userList;
 	}

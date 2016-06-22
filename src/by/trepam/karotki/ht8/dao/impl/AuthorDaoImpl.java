@@ -15,14 +15,14 @@ import by.trepam.karotki.ht8.entity.Author;
 
 public class AuthorDaoImpl implements IAuthorDao {
 	private ConnectionPool conPool = ConnectionPool.getInstance();
-	
+
 	private static final String AUTHOR_BY_COUNTRY = "SELECT AuthorFirstName, AuthorLastName FROM Author "
 			+ "JOIN Country ON Country.idCountry = Author.CountryOfBirth_id " + "WHERE CountryName = ? ;";
-	
+
 	private static final String AUTHOR_BY_FILM = "SELECT AuthorFirstName, AuthorLastName, Role FROM Author "
 			+ "JOIN Film_has_Authors ON Film_has_Authors.Authors_idAuthors = Author.idAuthor "
 			+ "JOIN Film ON film.idFilm = Film_has_Authors.Film_id " + "WHERE Title = ? ORDER BY Role ;";
-	
+
 	private static final String FIRST_NAME = "AuthorFirstName";
 	private static final String LAST_NAME = "AuthorLastName";
 
@@ -55,10 +55,7 @@ public class AuthorDaoImpl implements IAuthorDao {
 				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't return connection to ConnectionPool", e);
 			}
-
 		}
 		return authorList;
 	}
@@ -91,8 +88,6 @@ public class AuthorDaoImpl implements IAuthorDao {
 				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
-			} catch (ConnectionPoolException e) {
-				throw new DaoException("Can't get connection from ConnectionPool", e);
 			}
 		}
 		return authorList;

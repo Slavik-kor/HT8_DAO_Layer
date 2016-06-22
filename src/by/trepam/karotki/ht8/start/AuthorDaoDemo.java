@@ -11,10 +11,10 @@ public class AuthorDaoDemo {
 
 	public static void main(String[] args) throws DaoException {
 		DaoFactory factory = DaoFactory.getDaoFactory();
-		IAuthorDao ADao = factory.getAuthorDao();
+		IAuthorDao aDao = factory.getAuthorDao();
 		System.out.println("List of authors from \"Беларусь\":");
 
-		List<Author> aList = ADao.getAuthorListByCountry("Беларусь");
+		List<Author> aList = aDao.getAuthorListByCountry("Беларусь");
 
 		for (Author i : aList) {
 			System.out.println(i.getFirstName() + "  " + i.getLastName());
@@ -23,7 +23,7 @@ public class AuthorDaoDemo {
 		
 		System.out.println("List of authors from film \"Брестская крепость\":");
 
-		aList = ADao.getAuthorListByFilm("Брестская крепость");
+		aList = aDao.getAuthorListByFilm("Брестская крепость");
 
 		for (Author i : aList) {
 			System.out.println(i.getFirstName() + "  " + i.getLastName());
