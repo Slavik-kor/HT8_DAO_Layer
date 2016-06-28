@@ -80,10 +80,8 @@ public final class ConnectionPool {
 
 	public boolean returnConnection(Connection con) {
 		boolean ret = false;
-		if (givenAwayConQueue.contains(con)) {
-			givenAwayConQueue.remove(con);
-			connectionQueue.offer(con);
-			ret = true;
+		if (givenAwayConQueue.remove(con)) {
+			ret=connectionQueue.offer(con);
 		} else {
 			try {
 				con.close();

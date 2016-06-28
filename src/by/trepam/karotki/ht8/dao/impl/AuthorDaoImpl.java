@@ -52,10 +52,10 @@ public class AuthorDaoImpl implements IAuthorDao {
 			try {
 				rs.close();
 				ps.close();
-				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
 			}
+			conPool.returnConnection(con);
 		}
 		return authorList;
 	}
@@ -85,10 +85,10 @@ public class AuthorDaoImpl implements IAuthorDao {
 			try {
 				rs.close();
 				ps.close();
-				conPool.returnConnection(con);
 			} catch (SQLException e) {
 				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
 			}
+			conPool.returnConnection(con);
 		}
 		return authorList;
 	}
