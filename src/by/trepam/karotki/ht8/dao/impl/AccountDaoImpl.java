@@ -150,7 +150,7 @@ public class AccountDaoImpl implements IAccountDao {
 				rs.close();
 				ps.close();
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);// log
+				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
 			}
 			conPool.returnConnection(con);
 		}
@@ -178,7 +178,7 @@ public class AccountDaoImpl implements IAccountDao {
 				rs.close();
 				ps.close();
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);// log
+				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
 			}
 			conPool.returnConnection(con);
 		}
