@@ -15,4 +15,11 @@ public class DBColumnNames {
 	public static final String ACCOUNT_ROLE = "AccountRole";
 	public static final String ACCOUNT_IS_ACTIVE = "AccountActive";
 	public static final String ACCOUNT_CITY_ID = "City_id";
+	
+	public static final String AUTHOR_FIRST_NAME = "AuthorFirstName";
+	public static final String AUTHOR_LAST_NAME = "AuthorLastName";
+	
+	public static final String FILM_TITLE = "Title";
+	public static final String FILM_BUDGET = "Budget";
+	public static final String FILM_BOX_OFFICE_CASH = "BoxOfficeCash";
 }

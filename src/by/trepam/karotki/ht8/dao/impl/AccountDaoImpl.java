@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.trepam.karotki.ht8.connectionpool.ConnectionPool;
 import by.trepam.karotki.ht8.connectionpool.exception.ConnectionPoolException;
 import by.trepam.karotki.ht8.dao.DBColumnNames;
@@ -15,6 +18,7 @@ import by.trepam.karotki.ht8.dao.exception.DaoException;
 import by.trepam.karotki.ht8.entity.Account;
 
 public class AccountDaoImpl implements IAccountDao {
+	private static final Logger LOG = LogManager.getLogger();
 	private ConnectionPool conPool = ConnectionPool.getInstance();
 
 	private static final String ACCOUNT_BY_CITY = "SELECT AccountFirstName, AccountLastName, AccountBirthday, AccountEmail,"
@@ -67,7 +71,7 @@ public class AccountDaoImpl implements IAccountDao {
 				rs.close();
 				ps.close();
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+				LOG.warn("Can't close PreparedStatement or ResultSet");
 			}
 			conPool.returnConnection(con);
 		}
@@ -95,7 +99,7 @@ public class AccountDaoImpl implements IAccountDao {
 				rs.close();
 				ps.close();
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+				LOG.warn("Can't close PreparedStatement or ResultSet");
 			}
 			conPool.returnConnection(con);
 		}
@@ -122,7 +126,7 @@ public class AccountDaoImpl implements IAccountDao {
 				rs.close();
 				ps.close();
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+				LOG.warn("Can't close PreparedStatement or ResultSet");
 			}
 			conPool.returnConnection(con);
 		}
@@ -150,7 +154,7 @@ public class AccountDaoImpl implements IAccountDao {
 				rs.close();
 				ps.close();
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+				LOG.warn("Can't close PreparedStatement or ResultSet");
 			}
 			conPool.returnConnection(con);
 		}
@@ -178,7 +182,7 @@ public class AccountDaoImpl implements IAccountDao {
 				rs.close();
 				ps.close();
 			} catch (SQLException e) {
-				throw new DaoException("Can't close PreparedStatement or ResultSet", e);
+				LOG.warn("Can't close PreparedStatement or ResultSet");
 			}
 			conPool.returnConnection(con);
 		}
